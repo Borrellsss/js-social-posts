@@ -159,29 +159,31 @@ drawAllPosts(postArray);
 
 const allBtn = document.querySelectorAll(".js-like-button");
 // !DEBUG!
-console.log(allBtn);
+// console.log(allBtn);
 
 const allLikeCounter = document.querySelectorAll(".js-likes-counter");
 // !DEBUG!
-console.log(allLikeCounter);
+// console.log(allLikeCounter);
 
 for(let i = 0; i < allBtn.length; i++) {
     const thisBtn = allBtn[i];
-    console.log(thisBtn);
+    // !DEBUG!
+    // console.log(thisBtn);
 
     const thisCounter = allLikeCounter[i];
-    console.log(thisCounter);
+    // !DEBUG!
+    // console.log(thisCounter);
 
     let thisLikesNumber = parseInt(thisCounter.innerHTML);
+    // !DEBUG!
+    // console.log(thisLikesNumber);
 
     thisBtn.addEventListener("click", function(event) {
         event.preventDefault();
 
         if(!this.classList.contains("like-button--liked")) {
             this.classList.add("like-button--liked");
-
             thisLikesNumber++;
-
             thisCounter.innerHTML = thisLikesNumber;
         }
     });
