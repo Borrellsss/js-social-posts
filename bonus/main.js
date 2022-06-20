@@ -1,24 +1,9 @@
-// Descrizione:
-// Ricreiamo un feed social aggiungendo al
-// layout di base fornito, il nostro script JS in cui:
-// Milestone 1 - Creiamo il nostro array di oggetti
-// che rappresentano ciascun post.
-// Ogni post dovrà avere le informazioni necessarie
-// per stampare la relativa card:
-// - id del post, numero progressivo da 1 a n
-// - nome autore,
-// - foto autore,
-// - data in formato americano (mm-gg-yyyy),
-// - testo del post,
-// - immagine (non tutti i post devono avere una immagine),
-// - numero di likes.
-// Non è necessario creare date casuali
-// Per le immagini va bene utilizzare qualsiasi servizio
-// di placeholder ad es. Unsplash (https://unsplash.it/300/300?image=<id>)
-// Milestone 2 - Prendendo come riferimento il layout di esempio
-// presente nell'html, stampiamo i post del nostro feed.
-// Milestone 3 - Se clicchiamo sul tasto "Mi Piace" cambiamo
-// il colore al testo del bottone e incrementiamo il counter dei likes relativo.
+// BONUS
+// 1. Formattare le date in formato italiano (gg/mm/aaaa)
+// 2. Gestire l'assenza dell'immagine profilo con un elemento
+// di fallback che contiene le iniziali dell'utente (es. Luca Formicola > LF).
+// 3. Al click su un pulsante "Mi Piace" di un post, se abbiamo
+// già cliccato dobbiamo decrementare il contatore e cambiare il colore del bottone.
 
 // *FUNCTIONS*
 // *dichiaro la funzione che scorre l'array "postArray"*
@@ -41,16 +26,32 @@ function printAllPosts(thisPost) {
     // !DEBUG!
     // console.log(id, author, authorPicture, postDate, postText, postPicture, likes);
 
+    const splitDate = postDate.split("/");
+    // !DEBUG!
+    // console.log(splitDate);
+
+    const newDate = `${splitDate[1]}/${splitDate[0]}/${splitDate[2]}`;
+    // !DEBUG!
+    // console.log(newDate);
+
+    const splitAuthorName = author.split(" ");
+    // !DEBUG!
+    // console.log(splitAuthorName);
+
+    const firsLettersName = `${splitAuthorName[0][0]}${splitAuthorName[1][0]}`;
+    // !DEBUG!
+    // console.log(firsLettersName);
+
     const postToDraw = `
     <div class="post">
         <div class="post__header">
             <div class="post-meta">
                 <div class="post-meta__icon">
-                    ${isProfileImgNull(authorPicture, author)}           
+                    ${isProfileImgNull(firsLettersName, authorPicture, author)}       
                 </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${author}</div>
-                    <div class="post-meta__time">${postDate}</div>
+                    <div class="post-meta__time">${newDate}</div>
                 </div>
             </div>
         </div>
@@ -80,8 +81,8 @@ function printAllPosts(thisPost) {
 // *dichiaro una funzione che inserisce nel template generato nella funzione "printAllPosts"*
 // *una stringa specifica in base al valore della "key" "authorPicture" di ogni singolo*
 // *"object" presente nell'array "postArray"*
-function isProfileImgNull(profileImg, profileImgAlt) {
-    const profileImgNull = (profileImg === null) ? "" : `<img class="profile-pic" src="${profileImg}" alt="${profileImgAlt}"> `;
+function isProfileImgNull(newName, authorImg, name) {
+    const profileImgNull = (authorImg === null) ? `<span class="profile-pic-default">${newName}</span>` : `<img class="profile-pic" src="${authorImg}" alt="${name}">`;
 
     return profileImgNull;
 }
@@ -102,7 +103,7 @@ const postArray = [
     {
         id: 1,
         author: "Lorenzo Veropalumbo",
-        authorPicture: "https://unsplash.it/300/300?image=14",
+        authorPicture: null,
         postDate: "07/03/2022",
         postText: "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
         postPicture: "https://unsplash.it/600/300?image=171",
@@ -129,7 +130,7 @@ const postArray = [
     {
         id: 4,
         author: "Lucio Ghedina",
-        authorPicture: "https://unsplash.it/300/300?image=44",
+        authorPicture: null,
         postDate: "01/30/2022",
         postText: "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
         postPicture: "https://unsplash.it/600/300?image=395",
@@ -179,6 +180,10 @@ for(let i = 0; i < allBtn.length; i++) {
         if(!this.classList.contains("like-button--liked")) {
             this.classList.add("like-button--liked");
             thisLikesNumber++;
+            thisCounter.innerHTML = thisLikesNumber;
+        } else {
+            this.classList.remove("like-button--liked");
+            thisLikesNumber--;
             thisCounter.innerHTML = thisLikesNumber;
         }
     });
