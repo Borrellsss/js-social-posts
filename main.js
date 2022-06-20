@@ -21,6 +21,8 @@
 // il colore al testo del bottone e incrementiamo il counter dei likes relativo.
 
 // *FUNCTIONS*
+// *dichiaro la funzione che scorre l'array "postArray"*
+// *e ne ricava ogni singolo "object" presente al suo interno*
 function drawAllPosts(array) {
     for(let i = 0; i < array.length; i++) {
         thisArrayElement = array[i];
@@ -31,6 +33,9 @@ function drawAllPosts(array) {
     }
 }
 
+// *dichiaro una funzione che stampa nel DOM ogni singolo post*
+// *con all'interno del template le varie informazioni presenti nei singoli "objects"*
+// *ottenuti con la precedente funzione*
 function printAllPosts(thisPost) {
     const {id, author, authorPicture, postDate, postText, postPicture, likes} = thisPost;
     // !DEBUG!
@@ -41,7 +46,7 @@ function printAllPosts(thisPost) {
         <div class="post__header">
             <div class="post-meta">
                 <div class="post-meta__icon">
-                    <img class="profile-pic" src="${authorPicture}" alt="${author}">            
+                    ${isProfileImgNull(authorPicture, author)}           
                 </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${author}</div>
@@ -51,7 +56,7 @@ function printAllPosts(thisPost) {
         </div>
         <div class="post__text">${postText}</div>
         <div class="post__image">
-            <img src="${postPicture}" alt="${author} Picture">
+            ${isPostImgNull(postPicture, author)}
         </div>
         <div class="post__footer">
             <div class="likes js-likes">
@@ -72,13 +77,37 @@ function printAllPosts(thisPost) {
     postsWrapper.innerHTML += postToDraw;
 }
 
+function thisLikeClick(postToDraw) {
+    
+
+}
+
+// *dichiaro una funzione che inserisce nel template generato nella funzione "printAllPosts"*
+// *una stringa specifica in base al valore della "key" "authorPicture" di ogni singolo*
+// *"object" presente nell'array "postArray"*
+function isProfileImgNull(profileImg, profileImgAlt) {
+    const profileImgNull = (profileImg === null) ? "" : `<img class="profile-pic" src="${profileImg}" alt="${profileImgAlt}"> `;
+
+    return profileImgNull;
+}
+
+// *dichiaro una funzione che inserisce nel template generato nella funzione "printAllPosts"*
+// *una stringa specifica in base al valore della "key" "postPicture" di ogni singolo*
+// *"object" presente nell'array "postArray"*
+function isPostImgNull(postImg, postImgAlt) {
+    const postImgNull = (postImg === null) ? "" : `<img src="${postImg}" alt="${postImgAlt} Picture">`;
+
+    return postImgNull;
+}
+
 // *VARIABLES*
 // *arrays*
+// *dichiaro un array di "objects"*
 const postArray = [
     {
         id: 1,
         author: "Lorenzo Veropalumbo",
-        authorPicture: "https://unsplash.it/300/300?image=1",
+        authorPicture: "https://unsplash.it/300/300?image=14",
         postDate: "03/07/2022",
         postText: "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
         postPicture: "https://unsplash.it/600/300?image=171",
@@ -87,7 +116,7 @@ const postArray = [
     {
         id: 2,
         author: "Edoardo Borrello",
-        authorPicture: "https://unsplash.it/300/300?image=2",
+        authorPicture: "https://unsplash.it/300/300?image=30",
         postDate: "22/09/2021",
         postText: "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
         postPicture: "https://unsplash.it/600/300?image=221",
@@ -96,7 +125,7 @@ const postArray = [
     {
         id: 3,
         author: "Davide Pisani",
-        authorPicture: "https://unsplash.it/300/300?image=3",
+        authorPicture: "https://unsplash.it/300/300?image=50",
         postDate: "11/12/2021",
         postText: "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
         postPicture: null,
@@ -105,7 +134,7 @@ const postArray = [
     {
         id: 4,
         author: "Lucio Ghedina",
-        authorPicture: "https://unsplash.it/300/300?image=4",
+        authorPicture: "https://unsplash.it/300/300?image=44",
         postDate: "30/01/2022",
         postText: "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
         postPicture: "https://unsplash.it/600/300?image=395",
@@ -114,7 +143,7 @@ const postArray = [
     {
         id: 5,
         author: "Riccardo Binotto",
-        authorPicture: "https://unsplash.it/300/300?image=5",
+        authorPicture: "https://unsplash.it/300/300?image=10",
         postDate: "17/11/2021",
         postText: "Placeat libero ipsa nobis ipsum quibusdam quas harum ut. Distinctio minima iusto. Ad ad maiores et sint voluptate recusandae architecto. Et nihil ullam aut alias.",
         postPicture: null,
@@ -127,3 +156,33 @@ const postsWrapper = document.getElementById("container");
 
 // *LOGICA*
 drawAllPosts(postArray);
+
+const allBtn = document.querySelectorAll(".js-like-button");
+// !DEBUG!
+console.log(allBtn);
+
+const allLikeCounter = document.querySelectorAll(".js-likes-counter");
+// !DEBUG!
+console.log(allLikeCounter);
+
+for(let i = 0; i < allBtn.length; i++) {
+    const thisBtn = allBtn[i];
+    console.log(thisBtn);
+
+    const thisCounter = allLikeCounter[i];
+    console.log(thisCounter);
+
+    let thisLikesNumber = parseInt(thisCounter.innerHTML);
+
+    thisBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        if(!this.classList.contains("like-button--liked")) {
+            this.classList.add("like-button--liked");
+
+            thisLikesNumber++;
+
+            thisCounter.innerHTML = thisLikesNumber;
+        }
+    });
+}
